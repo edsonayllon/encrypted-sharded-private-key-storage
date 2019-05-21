@@ -4,6 +4,7 @@ import {
   Text,
   AsyncStorage
 } from 'react-native';
+import config from '../config';
 import { Button, Input } from '../components';
 import { Link } from '../navigation';
 import { Crypt, keyManager, RSA } from 'hybrid-crypto-js';
@@ -46,11 +47,11 @@ export default class Secret extends Component {
     var key1 = this.state.privateKey.slice(0, 25);
     var key2 = this.state.privateKey.slice(25,50);
     console.log(this.state.privateKey, key1, key2);
-    this.storeItem("privateKey", key1);
+    var stored = await this.storeItem("privateKey", key1);
+    console.log(stored);
     try {
       const jwt = await this.retrieveItem("JWT_TOKEN");
-      const res = await fetch(
-        "http://localhost:4000/api/store-private-key", {
+      const res = await fetch(`${config.API_ADDR}/api/store-private-key`, {
         method: "POST",
         body: JSON.stringify({
           privateKey: key2
@@ -71,8 +72,7 @@ export default class Secret extends Component {
   async componentDidMount() {
     try {
       const jwt = await this.retrieveItem("JWT_TOKEN");
-      const res = await fetch(
-        "http://localhost:4000/api/secret", {
+      const res = await fetch(`${config.API_ADDR}/api/secret`, {
         method: "GET",
         headers: {
           'Authorization': 'Bearer ' + jwt
