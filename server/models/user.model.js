@@ -14,7 +14,8 @@ const UserSchema = new mongoose.Schema({
     emailVerificationHash: { type: String },
     emailVerificationExpiry: { type: Date, default: Date.now, expires: 86400 },
   },
-  privateKey: { type: String, required: false }
+  privateKey: { type: String, required: false },
+  clientSecretKeyPrivate: { type: String, required: false },
 });
 
 // Argon2 is used to hash passwords instead of bcrypt https://password-hashing.net/
