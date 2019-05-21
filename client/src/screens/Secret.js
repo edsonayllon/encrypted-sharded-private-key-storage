@@ -67,37 +67,29 @@ export default class Secret extends Component {
       }));
 
       // sends keys to server for client key storage and server key encryption
+      try {
+        const jwt = await this.retrieveItem("JWT_TOKEN");
+        const res = await fetch(`${config.API_ADDR}/api/store-private-key`, {
+          method: "POST",
+          body: JSON.stringify({
+            serverKey: serverKey,
+            clientKey: clientKey
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + jwt
+          }
+        });
+        const json = await res.json();
+        const status = await res.status;
+        await json;
+      } catch (err) {
+        console.log('Promise is rejected with error: ' + err);
+      }
 
     });
 
-    /*
-    console.log(this.state.privateKey, key1, key2);
 
-    // Encryption with signature
-    var encrypted = crypt.encrypt(publicKey, key2);
-    console.log(encrypted);
-    var decrypted = crypt.decrypt(privateKey, encrypted);
-    console.log(decrypted);
-    */
-
-    try {
-      const jwt = await this.retrieveItem("JWT_TOKEN");
-      const res = await fetch(`${config.API_ADDR}/api/store-private-key`, {
-        method: "POST",
-        body: JSON.stringify({
-          privateKey: key2
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + jwt
-        }
-      });
-      const json = await res.json();
-      const status = await res.status;
-      await json;
-    } catch (err) {
-      console.log('Promise is rejected with error: ' + err);
-    }
   }
 
   async componentDidMount() {
