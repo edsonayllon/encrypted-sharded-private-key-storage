@@ -62,6 +62,24 @@ module.exports.resetPassword = async (email, password) => {
   }
 }
 
+module.exports.storePrivateKey = async (id, privateKey) => {
+  try {
+    const user = await User.findOne({ '_id': id });
+    if (!user) {
+      throw new Error('error getting user')
+      return false;
+    } else {
+      user.privateKey = privateKey;
+      user.save()
+      return true;
+    }
+  } catch (err) {
+    console.log('error from catch')
+    throw new Error('error getting user')
+    return false;
+  }
+}
+
 module.exports.changeUsername = async (id, username) => {
   try {
     const user = await User.findOne({ '_id': id });
