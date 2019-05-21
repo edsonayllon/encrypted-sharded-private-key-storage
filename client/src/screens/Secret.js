@@ -9,6 +9,9 @@ import { Button, Input } from '../components';
 import { Link } from '../navigation';
 import { Crypt, keyManager, RSA } from 'hybrid-crypto-js';
 
+var crypt = new Crypt();
+var rsa = new RSA();
+
 export default class Secret extends Component {
   state = {
     message: 'Loading..',
@@ -44,11 +47,39 @@ export default class Secret extends Component {
   }
 
   distriubteKey = async () => {
-    var key1 = this.state.privateKey.slice(0, 25);
-    var key2 = this.state.privateKey.slice(25,50);
+    rsa.generateKeypair(async (keypair) => {
+
+      // shards private key
+      var clientKey = this.state.privateKey.slice(0, 25);
+      var serverKey = this.state.privateKey.slice(25,50);
+
+      // captures generated encryption key pairing
+      var encryptionPublicKey = await keypair.publicKey;
+      var encryptionPrivateKey = await keypair.privateKey;
+
+      // encrypts server shard for server storage
+      var encrypted = crypt.encrypt(encryptionPublicKey, serverKey);
+
+      // stores server encryption keypairing in client localstorage
+      var stored = await this.storeItem("name" + "EncryptionKeys", JSON.stringify({
+        encryptionPublicKey: encryptionPublicKey,
+        encryptionPrivateKey: encryptionPrivateKey
+      }));
+
+      // sends keys to server for client key storage and server key encryption
+
+    });
+
+    /*
     console.log(this.state.privateKey, key1, key2);
-    var stored = await this.storeItem("privateKey", key1);
-    console.log(stored);
+
+    // Encryption with signature
+    var encrypted = crypt.encrypt(publicKey, key2);
+    console.log(encrypted);
+    var decrypted = crypt.decrypt(privateKey, encrypted);
+    console.log(decrypted);
+    */
+
     try {
       const jwt = await this.retrieveItem("JWT_TOKEN");
       const res = await fetch(`${config.API_ADDR}/api/store-private-key`, {
@@ -110,6 +141,10 @@ export default class Secret extends Component {
         <Button
           onPress = { this.distriubteKey }
           title='Save Key'
+        />
+        <Button
+          onPress = { this.combineKey }
+          title='Show Key'
         />
       </View>
     );

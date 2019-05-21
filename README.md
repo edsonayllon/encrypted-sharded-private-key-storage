@@ -11,6 +11,6 @@ Stores one private key in shards, encrypting each on separate hosts.
   - [x] Store in server
 - [ ] encrypted storage of private key
   - [ ] encrypt server key in client
-    - [ ] encrypt in client
-    - [ ] store private key in client
+    - [x] encrypt in client
+    - [x] store encryption keys in client
     - [ ] send encrypted key to server for storage
