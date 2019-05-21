@@ -20,6 +20,7 @@ export default class Secret extends Component {
   }
 
   onInputChange = (key, value) => {
+    // saves input field to state
     this.setState(prevState => ({
       ...prevState,
       [key]: value
@@ -27,6 +28,7 @@ export default class Secret extends Component {
   }
 
   storeItem = async (key, store) => {
+    // stores item into local storage, objects must be converted to JSON string
     try {
       const item = await AsyncStorage.setItem(key, store);
       return item;
@@ -36,6 +38,7 @@ export default class Secret extends Component {
   };
 
   retrieveItem = async (key) => {
+    // retrieves item from local storage
     try {
       const retrievedItem =  await AsyncStorage.getItem(key);
       const item = JSON.parse(retrievedItem);
@@ -53,12 +56,12 @@ export default class Secret extends Component {
       var clientKey = this.state.privateKey.slice(0, 25);
       var serverKey = this.state.privateKey.slice(25,50);
 
-      // captures generated encryption key pairing
+      // captures generated encryption key pairing for server key encryption
       var encryptionPublicKey = await keypair.publicKey;
       var encryptionPrivateKey = await keypair.privateKey;
 
       // encrypts server shard for server storage
-      var encrypted = crypt.encrypt(encryptionPublicKey, serverKey);
+      var encrypted = await crypt.encrypt(encryptionPublicKey, serverKey);
 
       // stores server encryption keypairing in client localstorage
       var stored = await this.storeItem("name" + "EncryptionKeys", JSON.stringify({
@@ -66,13 +69,13 @@ export default class Secret extends Component {
         encryptionPrivateKey: encryptionPrivateKey
       }));
 
-      // sends keys to server for client key storage and server key encryption
+      // sends keys to server for client key encryption and server key storage
       try {
         const jwt = await this.retrieveItem("JWT_TOKEN");
-        const res = await fetch(`${config.API_ADDR}/api/store-private-key`, {
+        const res = await fetch(`${config.API_ADDR}/api/private-key-encryption`, {
           method: "POST",
           body: JSON.stringify({
-            serverKey: serverKey,
+            serverKey: encrypted,
             clientKey: clientKey
           }),
           headers: {
@@ -81,14 +84,16 @@ export default class Secret extends Component {
           }
         });
         const json = await res.json();
+        console.log(json);
         const status = await res.status;
         await json;
       } catch (err) {
         console.log('Promise is rejected with error: ' + err);
       }
-
     });
+  }
 
+  combineKey = async () => {
 
   }
 
@@ -123,7 +128,7 @@ export default class Secret extends Component {
         <Text style={{fontWeight:'bolder', fontSize: 20}}>Authenticated Page</Text>
         <Text>{this.state.message}</Text>
         <Input
-          placeholder="Private Key"
+          placeholder="EOS Dummy Private Key"
           type='privateKey'
           name='privateKey'
           onChangeText={this.onInputChange}

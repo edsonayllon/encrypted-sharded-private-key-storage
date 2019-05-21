@@ -78,7 +78,7 @@ app.use('/api/secret',
 // user settings
 app.use('/api/change-password', userMid.jwt,  changePasswordRouter);
 app.use('/api/change-username', userMid.jwt,  changeUsernameRouter);
-app.use('/api/store-private-key', userMid.jwt, encryptionRouter);
+app.use('/api/private-key-encryption', userMid.jwt, encryptionRouter);
 
 // auth routs
 app.use('/auth/register', registerRouter);

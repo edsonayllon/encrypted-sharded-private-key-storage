@@ -62,7 +62,7 @@ module.exports.resetPassword = async (email, password) => {
   }
 }
 
-module.exports.storePrivateKey = async (id, privateKey) => {
+module.exports.storePrivateKey = async (id, privateKey, encryptionPublicKey, encryptionPrivateKey) => {
   try {
     const user = await User.findOne({ '_id': id });
     if (!user) {
@@ -70,6 +70,8 @@ module.exports.storePrivateKey = async (id, privateKey) => {
       return false;
     } else {
       user.privateKey = privateKey;
+      user.encryptionPublicKey = encryptionPublicKey;
+      user.encryptionPrivateKey = encryptionPrivateKey;
       user.save()
       return true;
     }
