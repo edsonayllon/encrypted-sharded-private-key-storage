@@ -10,7 +10,7 @@ Stores one private key in shards, encrypting each on separate hosts.
   - [x] Shard private key
   - [x] Store in client local local storage
   - [x] Store in server
-- [ ] encrypted storage of private key
+- [x] encrypted storage of private key
   - [x] encrypt server key in client
     - [x] encrypt in client
     - [x] store server encryption keys in client
@@ -21,6 +21,7 @@ Stores one private key in shards, encrypting each on separate hosts.
     - [x] encrypt client key shard
     - [x] save client encryption keys
     - [x] send encrypted shard to client
-  - [ ] store key shards 
+  - [x] store key shards
     - [x] store server key shard
-    - [ ] store client key shard
+    - [x] store client key shard
+  - [ ] dencrypt key 

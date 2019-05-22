@@ -64,7 +64,7 @@ export default class Secret extends Component {
       var encrypted = await crypt.encrypt(encryptionPublicKey, serverKey);
 
       // stores server encryption keypairing in client localstorage
-      var stored = await this.storeItem("name" + "EncryptionKeys", JSON.stringify({
+      await this.storeItem("name" + "EncryptionKeys", JSON.stringify({
         encryptionPublicKey: encryptionPublicKey,
         encryptionPrivateKey: encryptionPrivateKey
       }));
@@ -86,7 +86,17 @@ export default class Secret extends Component {
         const json = await res.json();
         console.log(json);
         const status = await res.status;
-        await json;
+        switch (status) {
+          case 200:
+            await this.storeItem("name", JSON.stringify({
+              clientKey: json.clientKey,
+            }));
+            console.log('success');
+            break;
+          default:
+            const error = new Error(res.error);
+            throw error;
+        };
       } catch (err) {
         console.log('Promise is rejected with error: ' + err);
       }
