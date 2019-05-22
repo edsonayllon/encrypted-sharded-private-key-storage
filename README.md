@@ -24,4 +24,8 @@ Stores one private key in shards, encrypting each on separate hosts.
   - [x] store key shards
     - [x] store server key shard
     - [x] store client key shard
-  - [ ] dencrypt key 
+  - [ ] dencrypt key
+    - [ ] send encrypted client shard to server
+    - [ ] unencrypt client shard in server
+    - [ ] send client shard and server shard to client
+    - [ ] unencrypt server shard in client
