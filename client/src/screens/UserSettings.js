@@ -5,6 +5,7 @@ import {
   AsyncStorage
 } from 'react-native';
 import { Button, Input } from '../components';
+import config from '../config';
 
 export default class UserSettings extends Component {
   state = {
@@ -51,7 +52,7 @@ export default class UserSettings extends Component {
     try {
       const jwt = await this.retrieveItem("JWT_TOKEN");
       const res = await fetch(
-        "http://localhost:4000/api/change-username", {
+        `${config.API_ADDR}/api/change-username`, {
         method: "GET",
         headers: {
           'Authorization': 'Bearer ' + jwt
