@@ -64,10 +64,12 @@ export default class Secret extends Component {
       var encrypted = await crypt.encrypt(encryptionPublicKey, serverKey);
 
       // stores server encryption keypairing in client localstorage
-      await this.storeItem("name" + "EncryptionKeys", JSON.stringify({
+      var stored = await this.storeItem("name" + "EncryptionKeys", JSON.stringify({
         encryptionPublicKey: encryptionPublicKey,
         encryptionPrivateKey: encryptionPrivateKey
       }));
+
+      console.log(stored);
 
       // sends keys to server for client key encryption and server key storage
       try {
@@ -91,10 +93,8 @@ export default class Secret extends Component {
         switch (status) {
           case 200:
 
-            // store encrypted client key 
-            await this.storeItem("name", JSON.stringify({
-              clientKey: json.clientKey,
-            }));
+            // store encrypted client key
+            await this.storeItem("name", json.clientKey);
             console.log('success');
             break;
           default:
@@ -108,6 +108,8 @@ export default class Secret extends Component {
   }
 
   combineKey = async () => {
+    const clientKey = await this.retrieveItem("name");
+    console.log(clientKey);
 
   }
 
