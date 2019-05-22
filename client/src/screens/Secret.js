@@ -83,11 +83,15 @@ export default class Secret extends Component {
             'Authorization': 'Bearer ' + jwt
           }
         });
+
+        // retrieve server resonse
         const json = await res.json();
         console.log(json);
         const status = await res.status;
         switch (status) {
           case 200:
+
+            // store encrypted client key 
             await this.storeItem("name", JSON.stringify({
               clientKey: json.clientKey,
             }));
