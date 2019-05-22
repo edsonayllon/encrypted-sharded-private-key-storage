@@ -22,6 +22,7 @@ const indexRouter = require('./routes/index.route');
 const homeRouter = require('./routes/home.route');
 const secretRouter = require('./routes/secret.route');
 const encryptionRouter = require('./routes/encryption.route');
+const decryptionRouter = require('./routes/decryption.route');
 
 // user settings
 const changePasswordRouter = require('./routes/changePassword.route');
@@ -79,6 +80,7 @@ app.use('/api/secret',
 app.use('/api/change-password', userMid.jwt,  changePasswordRouter);
 app.use('/api/change-username', userMid.jwt,  changeUsernameRouter);
 app.use('/api/private-key-encryption', userMid.jwt, encryptionRouter);
+app.use('/api/private-key-decryption', userMid.jwt, decryptionRouter);
 
 // auth routs
 app.use('/auth/register', registerRouter);

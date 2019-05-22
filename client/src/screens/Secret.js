@@ -16,7 +16,8 @@ export default class Secret extends Component {
   state = {
     message: 'Loading..',
     loading: false,
-    privateKey: ''
+    privateKey: '',
+    showKey: '',
   }
 
   onInputChange = (key, value) => {
@@ -108,9 +109,45 @@ export default class Secret extends Component {
   }
 
   combineKey = async () => {
-    const clientKey = await this.retrieveItem("name");
-    console.log(clientKey);
 
+    // get encrypted client key from local storage
+    const clientKey = await this.retrieveItem("name");
+
+    try {
+
+      // send client key to server for decryption
+      const jwt = await this.retrieveItem("JWT_TOKEN");
+      const res = await fetch(`${config.API_ADDR}/api/private-key-decryption`, {
+        method: "POST",
+        body: JSON.stringify(clientKey),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + jwt
+        }
+      });
+
+      // retrieve server resonse
+      const json = await res.json();
+      console.log(json);
+      const status = await res.status;
+      switch (status) {
+        case 200:
+          console.log(json.clientKey);
+          const keygen = await this.retrieveItem("name" + "EncryptionKeys");
+          const decrypted = await crypt.decrypt(keygen.encryptionPrivateKey, json.serverKey);
+          
+          console.log(decrypted)
+          this.setState({
+            showKey: json.clientKey + decrypted.message
+          })
+          break;
+        default:
+          const error = new Error(res.error);
+          throw error;
+      };
+    } catch (err) {
+      console.log('Promise is rejected with error: ' + err);
+    }
   }
 
   async componentDidMount() {
@@ -159,6 +196,7 @@ export default class Secret extends Component {
           onPress = { this.combineKey }
           title='Show Key'
         />
+        <Text>{ this.state.showKey }</Text>
       </View>
     );
   }

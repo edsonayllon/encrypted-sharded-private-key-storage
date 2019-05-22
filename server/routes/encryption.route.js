@@ -9,8 +9,6 @@ var rsa = new RSA();
 
 router.post('/', async (req, res, next) => {
   rsa.generateKeypair(async (keypair) => {
-    console.log('page accessed')
-
     // captures generated encryption key pairing for client key encryption
     var encryptionPublicKey = await keypair.publicKey;
     var encryptionPrivateKey = await keypair.privateKey;
