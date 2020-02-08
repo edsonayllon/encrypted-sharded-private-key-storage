@@ -1,10 +1,23 @@
-# sharded keys
+---
+author: Edson Ayllon
+category: functionality
+tags:
+- EOSIO
+- React
+- Node
+- Express
+- Encryption
+status: complete
+twitter: https://twitter.com/relativeread
+---
 
-## 1 | Description
+## Modular 13-2019
 
-Stores one private key in shards, encrypting each on separate hosts.
+# Encrypted Sharded Private Key Storage
 
-## 2 | Roadmap
+Stores one private key in shards, encrypting each on separate hosts. The string to decrypt a shard is stored on another host, and is randomly generated. 
+
+## 1. Roadmap
 
 - [x] unencrypted storage of private key
   - [x] Shard private key
@@ -24,8 +37,8 @@ Stores one private key in shards, encrypting each on separate hosts.
   - [x] store key shards
     - [x] store server key shard
     - [x] store client key shard
-  - [ ] dencrypt key
+  - [x] dencrypt key
     - [x] send encrypted client shard to server
     - [x] unencrypt client shard in server
-    - [ ] send client shard and server shard to client
-    - [ ] unencrypt server shard in client
+    - [x] send client shard and server shard to client
+    - [x] unencrypt server shard in client
