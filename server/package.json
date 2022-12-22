@@ -16,7 +16,7 @@
     "http-errors": "~1.6.2",
     "hybrid-crypto-js": "^0.1.7",
     "jade": "~1.11.0",
-    "jsonwebtoken": "^8.4.0",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^5.4.8",
     "morgan": "~1.9.0",
     "nodemailer": "^5.1.1",
